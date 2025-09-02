@@ -1,0 +1,175 @@
+\documentclass[tikz,border=5pt]{standalone}
+\usepackage{tikz}
+\usetikzlibrary{positioning,shapes.geometric,arrows.meta,fit,calc}
+
+\definecolor{inputcolor}{RGB}{240,240,240}
+\definecolor{convcolor}{RGB}{232,245,232}
+\definecolor{densecolor}{RGB}{227,242,253}
+\definecolor{fusioncolor}{RGB}{255,243,224}
+
+\begin{document}
+	\begin{tikzpicture}[
+		% Layer styles
+		input/.style={rectangle, rounded corners=3pt, minimum height=1cm, minimum width=2cm, 
+			fill=inputcolor, draw=black, line width=0.5pt, text centered, font=\footnotesize},
+		conv/.style={rectangle, rounded corners=3pt, minimum height=1cm, minimum width=1.8cm,
+			fill=convcolor, draw=black, line width=0.5pt, text centered, font=\footnotesize},
+		dense/.style={rectangle, rounded corners=3pt, minimum height=0.8cm, minimum width=1.5cm,
+			fill=densecolor, draw=black, line width=0.5pt, text centered, font=\footnotesize},
+		fusion/.style={rectangle, rounded corners=3pt, minimum height=1.2cm, minimum width=2cm,
+			fill=fusioncolor, draw=black, line width=0.5pt, text centered, font=\footnotesize},
+		output/.style={rectangle, rounded corners=3pt, minimum height=1cm, minimum width=1.5cm,
+			fill=inputcolor, draw=black, line width=0.5pt, text centered, font=\footnotesize},
+		% Arrow styles
+		arrow/.style={->, >=Stealth, thick, line width=1pt},
+		fusionarrow/.style={->, >=Stealth, thick, line width=1pt, color=orange},
+		resizearrow/.style={->, >=Stealth, thick, line width=1pt, dashed, color=red},
+		% Text styles
+		dimlabel/.style={font=\scriptsize, text=gray},
+		layerlabel/.style={font=\footnotesize}
+		]
+		
+		% TTG Input Path
+		\node[input] (ttg_input) at (0,6) {TTG Input};
+		\node[dimlabel, below=2pt of ttg_input] {B×176×1024×1024};
+		
+		% TTG Feature Extraction (TIMM Backbone)
+		\node[conv] (ttg_feat1) at (3,6.8) {Feature\\Level 0};
+		\node[dimlabel, below=2pt of ttg_feat1] {512×512×64};
+		
+		\node[conv] (ttg_feat2) at (5.5,6.8) {Feature\\Level 1};
+		\node[dimlabel, below=2pt of ttg_feat2] {256×256×128};
+		
+		\node[conv] (ttg_feat3) at (8,6.8) {Feature\\Level 2};
+		\node[dimlabel, below=2pt of ttg_feat3] {128×128×256};
+		
+		\node[conv] (ttg_feat4) at (10.5,6.8) {Feature\\Level 3};
+		\node[dimlabel, below=2pt of ttg_feat4] {64×64×512};
+		
+		% DCT Input Path
+		\node[input] (dct_input) at (0,3) {DCT Input};
+		\node[dimlabel, below=2pt of dct_input] {B×292×128×128};
+		
+		% Resize operation (if needed)
+		\node[dense] (resize) at (3,3) {Bilinear\\Resize};
+		\node[dimlabel, below=2pt of resize] {→128×128×292};
+		
+		% Fusion Detection System
+		\node[fusion] (fusion_detect) at (6,4.5) {Fusion Layer\\Detection};
+		\node[dimlabel, below=2pt of fusion_detect] {Auto-detect 128×128};
+		
+		% Feature Fusion Point
+		\node[fusion] (feature_fusion) at (10.5,4.5) {Feature\\Concatenation};
+		\node[dimlabel, below=2pt of feature_fusion] {128×128×(256+292)};
+		\node[dimlabel, below=12pt of feature_fusion] {= 128×128×548};
+		
+		% Segmentation Network (SMP U-Net)
+		\node[conv] (seg_encoder) at (13.5,4.5) {SMP Encoder\\(ResNet)};
+		\node[dimlabel, below=2pt of seg_encoder] {Multi-scale};
+		
+		\node[conv] (seg_bottleneck) at (16,4.5) {Bottleneck};
+		\node[dimlabel, below=2pt of seg_bottleneck] {Deepest features};
+		
+		\node[conv] (seg_decoder) at (18.5,4.5) {SMP Decoder\\(U-Net)};
+		\node[dimlabel, below=2pt of seg_decoder] {Multi-scale};
+		
+		% Final Output
+		\node[output] (seg_output) at (21,4.5) {Segmentation\\Output};
+		\node[dimlabel, below=2pt of seg_output] {B×K×1024×1024};
+		
+		% Loss Components
+		\node[output] (loss_bce) at (23.5,5.5) {BCE Loss};
+		\node[dimlabel, below=2pt of loss_bce] {λ weight};
+		
+		\node[output] (loss_dice) at (23.5,3.5) {Dice Loss};
+		\node[dimlabel, below=2pt of loss_dice] {(1-λ) weight};
+		
+		\node[output] (combined_loss) at (26,4.5) {Combined\\Loss};
+		\node[dimlabel, below=2pt of combined_loss] {λ·BCE + (1-λ)·Dice};
+		
+		% Main flow arrows
+		\draw[arrow] (ttg_input) -- (ttg_feat1);
+		\draw[arrow] (ttg_feat1) -- (ttg_feat2);
+		\draw[arrow] (ttg_feat2) -- (ttg_feat3);
+		\draw[arrow] (ttg_feat3) -- (ttg_feat4);
+		
+		\draw[arrow] (dct_input) -- (resize);
+		
+		% Fusion detection and selection
+		\draw[fusionarrow] (ttg_feat3) -- (fusion_detect);
+		\draw[arrow] (fusion_detect) -- (feature_fusion);
+		\draw[fusionarrow] (ttg_feat3) -- (feature_fusion);
+		
+		% DCT resize and fusion
+		\draw[resizearrow] (resize) to[out=0,in=180] (feature_fusion);
+		
+		% Segmentation pipeline
+		\draw[arrow] (feature_fusion) -- (seg_encoder);
+		\draw[arrow] (seg_encoder) -- (seg_bottleneck);
+		\draw[arrow] (seg_bottleneck) -- (seg_decoder);
+		\draw[arrow] (seg_decoder) -- (seg_output);
+		
+		% Loss computation
+		\draw[arrow] (seg_output) -- (loss_bce);
+		\draw[arrow] (seg_output) -- (loss_dice);
+		\draw[arrow] (loss_bce) -- (combined_loss);
+		\draw[arrow] (loss_dice) -- (combined_loss);
+		
+		% Adaptive fusion annotation
+		\node[draw, dashed, rounded corners, fit={(5.5,3.8) (11,5.2)}, color=blue, line width=1pt] {};
+		\node[layerlabel, color=blue] at (8.25,5.5) {Adaptive Fusion Strategy};
+		
+		% Auto-detection process
+		\node[layerlabel, color=green, font=\scriptsize] at (6,3.8) {\_detect\_fusion\_layer()};
+		
+		% Spatial dimension matching
+		\node[layerlabel, color=red, font=\scriptsize] at (7,2.5) {Spatial Matching: 128×128};
+		
+		% Feature dimension expansion
+		\node[layerlabel, color=purple, font=\scriptsize] at (10.5,3.5) {Channel Expansion};
+		
+		% Skip connections in segmentation model
+		\draw[arrow, dashed, color=gray] (seg_encoder.north) to[out=90,in=90] (seg_decoder.north);
+		\node[layerlabel, color=gray, font=\scriptsize] at (16,5.8) {U-Net Skip Connections};
+		
+		% Legend
+		\node[draw, rounded corners, fit={(22,1) (26.5,3)}, fill=white] (legend) {};
+		\node[layerlabel, above right=2pt of legend.north west] {Legend:};
+		\node[input, minimum width=0.8cm, minimum height=0.5cm] at (22.6,2.6) {};
+		\node[layerlabel, right=3pt] at (23.1,2.6) {Input/Output};
+		\node[conv, minimum width=0.8cm, minimum height=0.5cm] at (22.6,2.2) {};
+		\node[layerlabel, right=3pt] at (23.1,2.2) {Feature Extractor};
+		\node[fusion, minimum width=0.8cm, minimum height=0.5cm] at (22.6,1.8) {};
+		\node[layerlabel, right=3pt] at (23.1,1.8) {Fusion Module};
+		\node[dense, minimum width=0.8cm, minimum height=0.5cm] at (22.6,1.4) {};
+		\node[layerlabel, right=3pt] at (23.1,1.4) {Processing};
+		
+		% Arrow legend
+		\draw[fusionarrow] (24.5,2.6) -- (25.3,2.6);
+		\node[layerlabel, right=3pt] at (25.3,2.6) {Fusion};
+		\draw[resizearrow] (24.5,2.2) -- (25.3,2.2);
+		\node[layerlabel, right=3pt] at (25.3,2.2) {Resize};
+		\draw[arrow] (24.5,1.8) -- (25.3,1.8);
+		\node[layerlabel, right=3pt] at (25.3,1.8) {Forward};
+		
+		% Title
+		\node[layerlabel, font=\normalsize] at (13,8) {Cascade Fusion Segmentation Model};
+		
+		% Key innovation callouts
+		\node[layerlabel, color=blue, font=\footnotesize] at (8.25,0.5) {Key Innovation: Adaptive Feature Fusion};
+		\node[layerlabel, color=green, font=\footnotesize] at (16,0.5) {Leverages SMP Pre-trained Models};
+		
+		% Configuration parameters
+		\node[layerlabel, font=\scriptsize, text=gray] at (13,0) {
+			\begin{tabular}{c}
+				Configurable: ttg\_backbone (TIMM models), Unet\_model (SMP variants), \\
+				in\_channels (TTG: 176, DCT: 292), λ\_loss (BCE/Dice weighting)
+		\end{tabular}};
+		
+		% Metrics annotation
+		\node[output, minimum width=2.5cm] (metrics) at (21,2) {Segmentation\\Metrics};
+		\node[dimlabel, below=2pt of metrics] {IoU, Dice, per-class};
+		\draw[arrow, dashed] (seg_output) to[out=-90,in=90] (metrics);
+		
+	\end{tikzpicture}
+\end{document}

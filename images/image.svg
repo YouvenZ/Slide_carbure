@@ -1,0 +1,622 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="1000"
+   height="600"
+   version="1.1"
+   id="svg47"
+   sodipodi:docname="image.svg"
+   inkscape:version="1.4.2 (2aeb623e1d, 2025-05-12)"
+   inkscape:export-filename="../10f64a7a/multiple_binary_classifier.svg"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview47"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:zoom="0.577"
+     inkscape:cx="916.81109"
+     inkscape:cy="621.31716"
+     inkscape:window-width="1850"
+     inkscape:window-height="1016"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg47" />
+  <defs
+     id="defs4">
+    <linearGradient
+       id="redGradient"
+       x1="113.38934"
+       y1="317.49016"
+       x2="219.21939"
+       y2="317.49016"
+       gradientTransform="matrix(1.5451471,0,0,0.88294121,-4.148642,-42.803378)"
+       gradientUnits="userSpaceOnUse">
+      <stop
+         offset="0%"
+         style="stop-color:#d9534f;stop-opacity:1"
+         id="stop1" />
+      <stop
+         offset="100%"
+         style="stop-color:#f0ad4e;stop-opacity:1"
+         id="stop2" />
+    </linearGradient>
+    <linearGradient
+       id="greenGradient"
+       x1="0%"
+       y1="0%"
+       x2="100%"
+       y2="0%">
+      <stop
+         offset="0%"
+         style="stop-color:#5cb85c;stop-opacity:1"
+         id="stop3" />
+      <stop
+         offset="100%"
+         style="stop-color:#5bc0de;stop-opacity:1"
+         id="stop4" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#greenGradient"
+       id="linearGradient49"
+       x1="502.29473"
+       y1="277.12813"
+       x2="571.57677"
+       y2="277.12813"
+       gradientTransform="matrix(1.3487149,0,0,1.0115362,-167.67164,-42.803378)"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#greenGradient"
+       id="linearGradient50"
+       x1="588.89727"
+       y1="277.12813"
+       x2="658.17931"
+       y2="277.12813"
+       gradientTransform="matrix(1.3487149,0,0,1.0115362,-167.67164,-42.803378)"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#greenGradient"
+       id="linearGradient51"
+       x1="675.49981"
+       y1="277.12813"
+       x2="744.78185"
+       y2="277.12813"
+       gradientTransform="matrix(1.3487149,0,0,1.0115362,-167.67164,-42.803378)"
+       gradientUnits="userSpaceOnUse" />
+  </defs>
+  <!-- Background -->
+  <!-- Title -->
+  <text
+     x="475.05994"
+     y="25.917479"
+     text-anchor="middle"
+     font-family="Arial, sans-serif"
+     font-size="28.0325px"
+     font-weight="bold"
+     fill="#333333"
+     id="text4"
+     style="stroke-width:1.16802">Binary Classifier Strategy: Current vs Proposed Approach</text>
+  <!-- Current Approach Section -->
+  <rect
+     x="54.111008"
+     y="50.49691"
+     width="394.61655"
+     height="525.89246"
+     fill="#ffffff"
+     stroke="#d9534f"
+     stroke-width="3.22123"
+     rx="9.8654137"
+     id="rect5" />
+  <text
+     x="217.77542"
+     y="85.678978"
+     text-anchor="middle"
+     font-family="Arial"
+     font-size="21.0244px"
+     font-weight="bold"
+     fill="#d9534f"
+     id="text5"
+     style="stroke-width:1.16802">Current Multi-Class Approach</text>
+  <rect
+     x="89.293068"
+     y="120.71962"
+     width="140.16257"
+     height="70.081284"
+     fill="#e6f3ff"
+     stroke="#337ab7"
+     stroke-width="2.33604"
+     rx="5.8401065"
+     id="rect6" />
+  <text
+     x="159.37436"
+     y="149.92015"
+     text-anchor="middle"
+     font-family="Arial"
+     font-size="14.0162px"
+     fill="#333333"
+     id="text6"
+     style="stroke-width:1.16802">Multi-Class</text>
+  <text
+     x="159.37436"
+     y="167.44046"
+     text-anchor="middle"
+     font-family="Arial"
+     font-size="14.0162px"
+     fill="#333333"
+     id="text7"
+     style="stroke-width:1.16802">Dataset</text>
+  <text
+     x="159.37436"
+     y="184.96078"
+     text-anchor="middle"
+     font-family="Arial"
+     font-size="11.6802px"
+     fill="#666666"
+     id="text8"
+     style="stroke-width:1.16802">(5 classes)</text>
+  <rect
+     x="171.05457"
+     y="237.52176"
+     width="163.52299"
+     height="93.441704"
+     fill="url(#redGradient)"
+     rx="11.680213"
+     id="rect8"
+     style="fill:url(#redGradient);stroke-width:1.16802" />
+  <text
+     x="252.81604"
+     y="272.56241"
+     text-anchor="middle"
+     font-family="Arial"
+     font-size="16.3523px"
+     font-weight="bold"
+     fill="#ffffff"
+     id="text9"
+     style="stroke-width:1.16802">Single Complex</text>
+  <text
+     x="252.81604"
+     y="295.92282"
+     text-anchor="middle"
+     font-family="Arial"
+     font-size="16.3523px"
+     font-weight="bold"
+     fill="#ffffff"
+     id="text10"
+     style="stroke-width:1.16802">Multi-Class</text>
+  <text
+     x="252.81604"
+     y="319.28326"
+     text-anchor="middle"
+     font-family="Arial"
+     font-size="16.3523px"
+     font-weight="bold"
+     fill="#ffffff"
+     id="text11"
+     style="stroke-width:1.16802">Classifier</text>
+  <rect
+     x="182.73477"
+     y="377.68433"
+     width="140.16257"
+     height="70.081284"
+     fill="#ffe6e6"
+     stroke="#d9534f"
+     stroke-width="2.33604"
+     rx="5.8401065"
+     id="rect11" />
+  <text
+     x="252.81604"
+     y="406.88486"
+     text-anchor="middle"
+     font-family="Arial"
+     font-size="14.0162px"
+     fill="#333333"
+     id="text12"
+     style="stroke-width:1.16802">Classes:</text>
+  <text
+     x="252.81604"
+     y="424.40518"
+     text-anchor="middle"
+     font-family="Arial"
+     font-size="11.6802px"
+     fill="#666666"
+     id="text13"
+     style="stroke-width:1.16802">1, 2, 3, 4, 5</text>
+  <rect
+     x="63.596603"
+     y="482.80627"
+     width="373.76682"
+     height="81.761497"
+     fill="#f2dede"
+     stroke="#d9534f"
+     stroke-width="1.16802"
+     rx="5.8401065"
+     id="rect13" />
+  <text
+     x="250.48001"
+     y="506.16669"
+     text-anchor="middle"
+     font-family="Arial"
+     font-size="14.0162px"
+     font-weight="bold"
+     fill="#a94442"
+     id="text14"
+     style="stroke-width:1.16802">Challenges:</text>
+  <text
+     x="86.957024"
+     y="529.5271"
+     font-family="Arial"
+     font-size="11.6802px"
+     fill="#a94442"
+     id="text15"
+     style="stroke-width:1.16802">• Complex decision boundaries</text>
+  <text
+     x="86.957024"
+     y="547.04742"
+     font-family="Arial"
+     font-size="11.6802px"
+     fill="#a94442"
+     id="text16"
+     style="stroke-width:1.16802">• Class imbalance sensitivity</text>
+  <text
+     x="297.2009"
+     y="529.5271"
+     font-family="Arial"
+     font-size="11.6802px"
+     fill="#a94442"
+     id="text17"
+     style="stroke-width:1.16802">• Difficult optimization</text>
+  <text
+     x="297.2009"
+     y="547.04742"
+     font-family="Arial"
+     font-size="11.6802px"
+     fill="#a94442"
+     id="text18"
+     style="stroke-width:1.16802">• Lower interpretability</text>
+  <path
+     d="m 159.37436,202.48111 58.40106,23.36043"
+     stroke="#333333"
+     stroke-width="2.33604"
+     marker-end="url(#arrowhead)"
+     id="path18" />
+  <!-- Proposed Approach Section -->
+  <rect
+     x="474.74014"
+     y="50.638336"
+     width="467.20856"
+     height="525.60962"
+     fill="#ffffff"
+     stroke="#5cb85c"
+     stroke-width="3.50406"
+     rx="11.680213"
+     id="rect19" />
+  <text
+     x="708.34442"
+     y="85.678978"
+     text-anchor="middle"
+     font-family="Arial"
+     font-size="21.0244px"
+     font-weight="bold"
+     fill="#5cb85c"
+     id="text19"
+     style="stroke-width:1.16802">Proposed Binary Classifier Approach</text>
+  <rect
+     x="509.78076"
+     y="120.71962"
+     width="140.16257"
+     height="70.081284"
+     fill="#e6f3ff"
+     stroke="#337ab7"
+     stroke-width="2.33604"
+     rx="5.8401065"
+     id="rect20" />
+  <text
+     x="579.86206"
+     y="149.92015"
+     text-anchor="middle"
+     font-family="Arial"
+     font-size="14.0162px"
+     fill="#333333"
+     id="text20"
+     style="stroke-width:1.16802">Binary</text>
+  <text
+     x="579.86206"
+     y="167.44046"
+     text-anchor="middle"
+     font-family="Arial"
+     font-size="14.0162px"
+     fill="#333333"
+     id="text21"
+     style="stroke-width:1.16802">Datasets</text>
+  <text
+     x="579.86206"
+     y="184.96078"
+     text-anchor="middle"
+     font-family="Arial"
+     font-size="11.6802px"
+     fill="#666666"
+     id="text22"
+     style="stroke-width:1.16802">(Class vs No-Class)</text>
+  <rect
+     x="509.78076"
+     y="237.52176"
+     width="93.441704"
+     height="70.081284"
+     fill="url(#greenGradient)"
+     rx="5.8401065"
+     id="rect22"
+     style="fill:url(#linearGradient49);stroke-width:1.16802" />
+  <text
+     x="556.50159"
+     y="266.72229"
+     text-anchor="middle"
+     font-family="Arial"
+     font-size="11.6802px"
+     font-weight="bold"
+     fill="#ffffff"
+     id="text23"
+     style="stroke-width:1.16802">Binary</text>
+  <text
+     x="556.50159"
+     y="284.24261"
+     text-anchor="middle"
+     font-family="Arial"
+     font-size="11.6802px"
+     font-weight="bold"
+     fill="#ffffff"
+     id="text24"
+     style="stroke-width:1.16802">Classifier 1</text>
+  <rect
+     x="626.58289"
+     y="237.52176"
+     width="93.441704"
+     height="70.081284"
+     fill="url(#greenGradient)"
+     rx="5.8401065"
+     id="rect24"
+     style="fill:url(#linearGradient50);stroke-width:1.16802" />
+  <text
+     x="673.30383"
+     y="266.72229"
+     text-anchor="middle"
+     font-family="Arial"
+     font-size="11.6802px"
+     font-weight="bold"
+     fill="#ffffff"
+     id="text25"
+     style="stroke-width:1.16802">Binary</text>
+  <text
+     x="673.30383"
+     y="284.24261"
+     text-anchor="middle"
+     font-family="Arial"
+     font-size="11.6802px"
+     font-weight="bold"
+     fill="#ffffff"
+     id="text26"
+     style="stroke-width:1.16802">Classifier 2</text>
+  <rect
+     x="743.38513"
+     y="237.52176"
+     width="93.441704"
+     height="70.081284"
+     fill="url(#greenGradient)"
+     rx="5.8401065"
+     id="rect26"
+     style="fill:url(#linearGradient51);stroke-width:1.16802" />
+  <text
+     x="790.1059"
+     y="266.72229"
+     text-anchor="middle"
+     font-family="Arial"
+     font-size="11.6802px"
+     font-weight="bold"
+     fill="#ffffff"
+     id="text27"
+     style="stroke-width:1.16802">Binary</text>
+  <text
+     x="790.1059"
+     y="284.24261"
+     text-anchor="middle"
+     font-family="Arial"
+     font-size="11.6802px"
+     font-weight="bold"
+     fill="#ffffff"
+     id="text28"
+     style="stroke-width:1.16802">Classifier 3</text>
+  <text
+     x="848.50696"
+     y="272.56241"
+     text-anchor="middle"
+     font-family="Arial"
+     font-size="23.3604px"
+     fill="#666666"
+     id="text29"
+     style="stroke-width:1.16802">...</text>
+  <rect
+     x="626.58289"
+     y="337.97162"
+     width="116.80215"
+     height="46.720852"
+     fill="#d4edda"
+     stroke="#5cb85c"
+     stroke-width="2.33604"
+     rx="5.8401065"
+     id="rect29" />
+  <text
+     x="684.98395"
+     y="361.332"
+     text-anchor="middle"
+     font-family="Arial"
+     font-size="14.0162px"
+     fill="#333333"
+     id="text30"
+     style="stroke-width:1.16802">Ensemble</text>
+  <text
+     x="684.98395"
+     y="378.85233"
+     text-anchor="middle"
+     font-family="Arial"
+     font-size="14.0162px"
+     fill="#333333"
+     id="text31"
+     style="stroke-width:1.16802">Decision</text>
+  <rect
+     x="626.58289"
+     y="401.04474"
+     width="116.80215"
+     height="46.720852"
+     fill="#e6ffe6"
+     stroke="#5cb85c"
+     stroke-width="2.33604"
+     rx="5.8401065"
+     id="rect31" />
+  <text
+     x="684.98395"
+     y="424.40518"
+     text-anchor="middle"
+     font-family="Arial"
+     font-size="14.0162px"
+     fill="#333333"
+     id="text32"
+     style="stroke-width:1.16802">Anomaly Type</text>
+  <text
+     x="684.98395"
+     y="441.92551"
+     text-anchor="middle"
+     font-family="Arial"
+     font-size="14.0162px"
+     fill="#333333"
+     id="text33"
+     style="stroke-width:1.16802">Detection</text>
+  <rect
+     x="498.10059"
+     y="482.80627"
+     width="373.76682"
+     height="81.761497"
+     fill="#dff0d8"
+     stroke="#5cb85c"
+     stroke-width="1.16802"
+     rx="5.8401065"
+     id="rect33" />
+  <text
+     x="684.98395"
+     y="506.16669"
+     text-anchor="middle"
+     font-family="Arial"
+     font-size="14.0162px"
+     font-weight="bold"
+     fill="#3c763d"
+     id="text34"
+     style="stroke-width:1.16802">Benefits:</text>
+  <text
+     x="521.461"
+     y="529.5271"
+     font-family="Arial"
+     font-size="11.6802px"
+     fill="#3c763d"
+     id="text35"
+     style="stroke-width:1.16802">• Simpler decision boundaries</text>
+  <text
+     x="521.461"
+     y="547.04742"
+     font-family="Arial"
+     font-size="11.6802px"
+     fill="#3c763d"
+     id="text36"
+     style="stroke-width:1.16802">• Better class balance handling</text>
+  <text
+     x="731.7049"
+     y="529.5271"
+     font-family="Arial"
+     font-size="11.6802px"
+     fill="#3c763d"
+     id="text37"
+     style="stroke-width:1.16802">• Parallel optimization</text>
+  <text
+     x="731.7049"
+     y="547.04742"
+     font-family="Arial"
+     font-size="11.6802px"
+     fill="#3c763d"
+     id="text38"
+     style="stroke-width:1.16802">• Enhanced interpretability</text>
+  <path
+     d="m 579.86206,202.48111 -23.36042,23.36043"
+     stroke="#333333"
+     stroke-width="2.33604"
+     marker-end="url(#arrowhead)"
+     id="path38" />
+  <path
+     d="m 579.86206,202.48111 93.44171,23.36043"
+     stroke="#333333"
+     stroke-width="2.33604"
+     marker-end="url(#arrowhead)"
+     id="path39" />
+  <path
+     d="m 579.86206,202.48111 210.24385,23.36043"
+     stroke="#333333"
+     stroke-width="2.33604"
+     marker-end="url(#arrowhead)"
+     id="path40" />
+  <path
+     d="m 556.50164,319.28325 93.4417,11.68021"
+     stroke="#333333"
+     stroke-width="2.33604"
+     marker-end="url(#arrowhead)"
+     id="path41" />
+  <path
+     d="m 673.30377,323.95534 v 11.68021"
+     stroke="#333333"
+     stroke-width="2.33604"
+     marker-end="url(#arrowhead)"
+     id="path42" />
+  <path
+     d="m 790.10591,319.28325 -81.7615,11.68021"
+     stroke="#333333"
+     stroke-width="2.33604"
+     marker-end="url(#arrowhead)"
+     id="path43" />
+  <!-- Comparison Arrow -->
+  <!-- Arrow marker definitions -->
+  <defs
+     id="defs47">
+    <marker
+       id="arrowhead"
+       markerWidth="10"
+       markerHeight="7"
+       refX="10"
+       refY="3.5"
+       orient="auto">
+      <polygon
+         points="0 0, 10 3.5, 0 7"
+         fill="#333"
+         id="polygon46" />
+    </marker>
+    <marker
+       id="bigArrowhead"
+       markerWidth="15"
+       markerHeight="12"
+       refX="15"
+       refY="6"
+       orient="auto">
+      <polygon
+         points="0 0, 15 6, 0 12"
+         fill="#333"
+         id="polygon47" />
+    </marker>
+  </defs>
+</svg>

@@ -1,0 +1,233 @@
+\documentclass[tikz,border=5pt]{standalone}
+\usepackage{tikz}
+\usetikzlibrary{positioning,shapes.geometric,arrows.meta,fit,calc}
+
+\definecolor{inputcolor}{RGB}{240,240,240}
+\definecolor{convcolor}{RGB}{232,245,232}
+\definecolor{densecolor}{RGB}{227,242,253}
+\definecolor{fusioncolor}{RGB}{255,243,224}
+
+\begin{document}
+	\begin{tikzpicture}[
+		% Layer styles
+		input/.style={rectangle, rounded corners=3pt, minimum height=1cm, minimum width=2cm, 
+			fill=inputcolor, draw=black, line width=0.5pt, text centered, font=\footnotesize},
+		conv/.style={rectangle, rounded corners=3pt, minimum height=1cm, minimum width=1.8cm,
+			fill=convcolor, draw=black, line width=0.5pt, text centered, font=\footnotesize},
+		dense/.style={rectangle, rounded corners=3pt, minimum height=0.8cm, minimum width=1.5cm,
+			fill=densecolor, draw=black, line width=0.5pt, text centered, font=\footnotesize},
+		fusion/.style={rectangle, rounded corners=3pt, minimum height=1cm, minimum width=1.8cm,
+			fill=fusioncolor, draw=black, line width=0.5pt, text centered, font=\footnotesize},
+		output/.style={rectangle, rounded corners=3pt, minimum height=1cm, minimum width=1.5cm,
+			fill=inputcolor, draw=black, line width=0.5pt, text centered, font=\footnotesize},
+		% Arrow styles
+		arrow/.style={->, >=Stealth, thick, line width=1pt},
+		fusionarrow/.style={->, >=Stealth, thick, line width=1pt, color=orange},
+		skiparrow/.style={->, >=Stealth, thick, line width=1pt, dashed, color=blue},
+		% Text styles
+		dimlabel/.style={font=\scriptsize, text=gray},
+		layerlabel/.style={font=\footnotesize}
+		]
+		
+		% Input layers
+		\node[input] (ttg_input) at (0,6) {TTG Input};
+		\node[dimlabel, below=2pt of ttg_input] {B×176×512×512};
+		
+		\node[input] (dct_input) at (0,2) {DCT Input};
+		\node[dimlabel, below=2pt of dct_input] {B×292×64×64};
+		
+		% TTG Encoder Path (ResNet)
+		\node[conv] (ttg_enc1) at (2.5,6.8) {Enc₁};
+		\node[dimlabel, below=2pt of ttg_enc1] {256×256×64};
+		
+		\node[conv] (ttg_enc2) at (4.5,6.8) {Enc₂};
+		\node[dimlabel, below=2pt of ttg_enc2] {128×128×128};
+		
+		\node[conv] (ttg_enc3) at (6.5,6.8) {Enc₃};
+		\node[dimlabel, below=2pt of ttg_enc3] {64×64×256};
+		
+		\node[conv] (ttg_enc4) at (8.5,6.8) {Enc₄};
+		\node[dimlabel, below=2pt of ttg_enc4] {32×32×512};
+		
+		% DCT Encoder Path (ResNet)
+		\node[conv] (dct_enc1) at (2.5,2.8) {Enc₁};
+		\node[dimlabel, below=2pt of dct_enc1] {32×32×64};
+		
+		\node[conv] (dct_enc2) at (4.5,2.8) {Enc₂};
+		\node[dimlabel, below=2pt of dct_enc2] {16×16×128};
+		
+		\node[conv] (dct_enc3) at (6.5,2.8) {Enc₃};
+		\node[dimlabel, below=2pt of dct_enc3] {8×8×256};
+		
+		\node[conv] (dct_enc4) at (8.5,2.8) {Enc₄};
+		\node[dimlabel, below=2pt of dct_enc4] {4×4×512};
+		
+		% Fusion Strategy Selection
+		\node[fusion] (fusion_strategy) at (10.5,4.8) {Fusion\\Strategy};
+		\node[dimlabel, below=2pt of fusion_strategy] {Input/Multi/Latent};
+		
+		% Fused Features
+		\node[conv] (fused_feat1) at (12.5,6.4) {Fused₁};
+		\node[dimlabel, below=2pt of fused_feat1] {Enhanced};
+		
+		\node[conv] (fused_feat2) at (12.5,5.6) {Fused₂};
+		\node[dimlabel, below=2pt of fused_feat2] {Enhanced};
+		
+		\node[conv] (fused_feat3) at (12.5,4.8) {Fused₃};
+		\node[dimlabel, below=2pt of fused_feat3] {Enhanced};
+		
+		\node[conv] (fused_feat4) at (12.5,4.0) {Fused₄};
+		\node[dimlabel, below=2pt of fused_feat4] {Enhanced};
+		
+		% Decoder Selection
+		\node[dense] (decoder_select) at (14.5,5.2) {Decoder\\Selection};
+		\node[dimlabel, below=2pt of decoder_select] {U-Net/FPN/++};
+		
+		% Decoder Path
+		\node[conv] (dec4) at (16.5,4.0) {Dec₄};
+		\node[dimlabel, below=2pt of dec4] {32×32×256};
+		
+		\node[conv] (dec3) at (18.5,4.8) {Dec₃};
+		\node[dimlabel, below=2pt of dec3] {64×64×128};
+		
+		\node[conv] (dec2) at (20.5,5.6) {Dec₂};
+		\node[dimlabel, below=2pt of dec2] {128×128×64};
+		
+		\node[conv] (dec1) at (22.5,6.4) {Dec₁};
+		\node[dimlabel, below=2pt of dec1] {256×256×32};
+		
+		% Segmentation Head
+		\node[conv] (seg_head) at (24.5,6.4) {Seg Head};
+		\node[dimlabel, below=2pt of seg_head] {512×512×16};
+		
+		% Final Output
+		\node[output] (final_output) at (26.5,6.4) {Output};
+		\node[dimlabel, below=2pt of final_output] {B×K×512×512};
+		
+		% Loss Components
+		\node[output] (bce_loss) at (28.5,7.2) {BCE Loss};
+		\node[dimlabel, below=2pt of bce_loss] {λ weight};
+		
+		\node[output] (dice_loss) at (28.5,5.6) {Dice Loss};
+		\node[dimlabel, below=2pt of dice_loss] {(1-λ) weight};
+		
+		\node[output] (combined_loss) at (30.5,6.4) {Combined\\Loss};
+		\node[dimlabel, below=2pt of combined_loss] {Weighted Sum};
+		
+		% Main flow arrows - TTG path
+		\draw[arrow] (ttg_input) -- (ttg_enc1);
+		\draw[arrow] (ttg_enc1) -- (ttg_enc2);
+		\draw[arrow] (ttg_enc2) -- (ttg_enc3);
+		\draw[arrow] (ttg_enc3) -- (ttg_enc4);
+		
+		% Main flow arrows - DCT path
+		\draw[arrow] (dct_input) -- (dct_enc1);
+		\draw[arrow] (dct_enc1) -- (dct_enc2);
+		\draw[arrow] (dct_enc2) -- (dct_enc3);
+		\draw[arrow] (dct_enc3) -- (dct_enc4);
+		
+		% Fusion arrows
+		\draw[fusionarrow] (ttg_enc1) to[out=0,in=180] (fusion_strategy);
+		\draw[fusionarrow] (ttg_enc2) to[out=0,in=180] (fusion_strategy);
+		\draw[fusionarrow] (ttg_enc3) to[out=0,in=180] (fusion_strategy);
+		\draw[fusionarrow] (ttg_enc4) to[out=0,in=180] (fusion_strategy);
+		\draw[fusionarrow] (dct_enc1) to[out=0,in=180] (fusion_strategy);
+		\draw[fusionarrow] (dct_enc2) to[out=0,in=180] (fusion_strategy);
+		\draw[fusionarrow] (dct_enc3) to[out=0,in=180] (fusion_strategy);
+		\draw[fusionarrow] (dct_enc4) to[out=0,in=180] (fusion_strategy);
+		
+		% Fused features
+		\draw[arrow] (fusion_strategy) -- (fused_feat1);
+		\draw[arrow] (fusion_strategy) -- (fused_feat2);
+		\draw[arrow] (fusion_strategy) -- (fused_feat3);
+		\draw[arrow] (fusion_strategy) -- (fused_feat4);
+		
+		% Decoder selection and flow
+		\draw[arrow] (fused_feat1) -- (decoder_select);
+		\draw[arrow] (fused_feat2) -- (decoder_select);
+		\draw[arrow] (fused_feat3) -- (decoder_select);
+		\draw[arrow] (fused_feat4) -- (decoder_select);
+		
+		\draw[arrow] (decoder_select) -- (dec4);
+		\draw[arrow] (dec4) -- (dec3);
+		\draw[arrow] (dec3) -- (dec2);
+		\draw[arrow] (dec2) -- (dec1);
+		\draw[arrow] (dec1) -- (seg_head);
+		\draw[arrow] (seg_head) -- (final_output);
+		
+		% Skip connections
+		\draw[skiparrow] (fused_feat4.east) to[out=0,in=270] (dec4.south);
+		\draw[skiparrow] (fused_feat3.east) to[out=0,in=270] (dec3.south);
+		\draw[skiparrow] (fused_feat2.east) to[out=0,in=270] (dec2.south);
+		\draw[skiparrow] (fused_feat1.east) to[out=0,in=270] (dec1.south);
+		
+		% Loss computation
+		\draw[arrow] (final_output) -- (bce_loss);
+		\draw[arrow] (final_output) -- (dice_loss);
+		\draw[arrow] (bce_loss) -- (combined_loss);
+		\draw[arrow] (dice_loss) -- (combined_loss);
+		
+		% Fusion strategy options
+		\node[layerlabel, color=orange, font=\scriptsize] at (10.5,4.2) {Input: Early fusion};
+		\node[layerlabel, color=orange, font=\scriptsize] at (10.5,3.8) {Multi: Multi-scale};
+		\node[layerlabel, color=orange, font=\scriptsize] at (10.5,3.4) {Latent: Late fusion};
+		
+		% Decoder options
+		\node[layerlabel, color=blue, font=\scriptsize] at (14.5,4.6) {U-Net, U-Net++};
+		\node[layerlabel, color=blue, font=\scriptsize] at (14.5,4.2) {FPN, LinkNet};
+		\node[layerlabel, color=blue, font=\scriptsize] at (14.5,3.8) {UperNet};
+		
+		% Architecture components highlighting
+		\node[draw, dashed, rounded corners, fit={(2,6.2) (9,7.4)}, color=green, line width=1pt] {};
+		\node[layerlabel, color=green] at (5.5,7.7) {TTG Encoder (ResNet)};
+		
+		\node[draw, dashed, rounded corners, fit={(2,2.2) (9,3.4)}, color=purple, line width=1pt] {};
+		\node[layerlabel, color=purple] at (5.5,1.9) {DCT Encoder (ResNet)};
+		
+		\node[draw, dashed, rounded corners, fit={(10,3.2) (13,6.8)}, color=orange, line width=1pt] {};
+		\node[layerlabel, color=orange] at (11.5,7.1) {Adaptive Fusion};
+		
+		\node[draw, dashed, rounded corners, fit={(16,3.4) (25,7)}, color=blue, line width=1pt] {};
+		\node[layerlabel, color=blue] at (20.5,7.3) {Configurable Decoder};
+		
+		% Legend
+		\node[draw, rounded corners, fit={(27,1) (31,3.5)}, fill=white] (legend) {};
+		\node[layerlabel, above right=2pt of legend.north west] {Legend:};
+		\node[input, minimum width=0.8cm, minimum height=0.5cm] at (27.6,3.1) {};
+		\node[layerlabel, right=3pt] at (28.1,3.1) {Input/Output};
+		\node[conv, minimum width=0.8cm, minimum height=0.5cm] at (27.6,2.7) {};
+		\node[layerlabel, right=3pt] at (28.1,2.7) {Conv Block};
+		\node[fusion, minimum width=0.8cm, minimum height=0.5cm] at (27.6,2.3) {};
+		\node[layerlabel, right=3pt] at (28.1,2.3) {Fusion};
+		\node[dense, minimum width=0.8cm, minimum height=0.5cm] at (27.6,1.9) {};
+		\node[layerlabel, right=3pt] at (28.1,1.9) {Processing};
+		
+		% Arrow legend
+		\draw[fusionarrow] (29.2,2.7) -- (30,2.7);
+		\node[layerlabel, right=3pt] at (30,2.7) {Fusion};
+		\draw[skiparrow] (29.2,2.3) -- (30,2.3);
+		\node[layerlabel, right=3pt] at (30,2.3) {Skip};
+		\draw[arrow] (29.2,1.9) -- (30,1.9);
+		\node[layerlabel, right=3pt] at (30,1.9) {Forward};
+		
+		% Title
+		\node[layerlabel, font=\normalsize] at (15.25,9) {Fusion Segmentation Model: Multi-Strategy Architecture};
+		
+		% Key features annotation
+		\node[layerlabel, color=red, font=\footnotesize] at (10.5,0.8) {Configurable Fusion Strategies};
+		\node[layerlabel, color=red, font=\footnotesize] at (20.5,0.8) {Multiple Decoder Options};
+		
+		% Configuration parameters
+		\node[layerlabel, font=\scriptsize, text=gray] at (15.25,0.2) {
+			\begin{tabular}{c}
+				Parameters: backbone\_name (ResNet variants), fusion\_strategy (input/multi/latent), \\
+				decoder\_type (unet/fpn/unet++/linknet/upernet), λ\_loss (BCE/Dice balance)
+		\end{tabular}};
+		
+		% Metrics output
+		\node[output, minimum width=2.5cm] (metrics) at (26.5,4) {Metrics\\IoU, Dice};
+		\node[dimlabel, below=2pt of metrics] {Per-class \& Macro};
+		\draw[arrow, dashed] (final_output) to[out=-90,in=90] (metrics);
+		
+	\end{tikzpicture}
+\end{document}
